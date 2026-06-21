@@ -1567,7 +1567,7 @@ function renderPlatformAdminDashboard() {
           ${tenants.map(([name, orgs, teams, projects], index) => `<g class="admin-node" transform="translate(720,${100 + index * 76})"><rect x="-104" y="-28" width="208" height="56" rx="16"></rect><text text-anchor="middle" y="-3">${name}</text><text text-anchor="middle" y="16">${teams} / ${projects}</text></g>`).join("")}
         </svg>
       </div>
-      <aside class="glass phase-side">
+      <aside class="glass phase-side" style="width: max-content;">
         <div class="panel-head tight"><div><span class="kicker">Platform activity stream</span><h2>Global operations</h2></div></div>
         <div class="audit-log compact">
           ${["Azure OpenAI key rotated", "Northstar budget alert resolved", "QA Team model access updated", "Global prompt v7.2 approved"].map((item, index) => `<div><span>${item}</span><strong>${["Security", "Cost", "Access", "Prompt"][index]}</strong><small>${["now", "11m", "28m", "1h"][index]}</small></div>`).join("")}
