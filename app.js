@@ -441,7 +441,8 @@ function streamPanel() {
 function orbitVisualization() {
   return `
     <div class="orbit-stage">
-      <svg viewBox="0 0 720 520" role="img" aria-label="Project orbit visualization">
+      <div class="three-scene mission-three" data-three-scene="mission" data-scene-title="Interactive Project Universe"></div>
+      <svg class="scene-fallback" viewBox="0 0 720 520" role="img" aria-label="Project orbit visualization">
         <defs>
           <linearGradient id="orbitGlow" x1="0" x2="1">
             <stop offset="0%" stop-color="#38bdf8"/>
@@ -720,7 +721,8 @@ function renderTwin() {
     <section class="screen-grid twin-layout">
       <div class="glass span-8 twin-stage">
         <div class="panel-head"><div><span class="kicker">Project digital twin</span><h2>Omni-Claims delivery graph</h2></div>${chip("stream synced", "good")}</div>
-        ${renderTwinGraph()}
+        <div class="three-scene twin-three" data-three-scene="twin" data-scene-title="3D dependency graph"></div>
+        <div class="scene-fallback">${renderTwinGraph()}</div>
       </div>
       <aside class="glass span-4 twin-side">
         <div class="panel-head tight"><div><span class="kicker">${selected[1]}</span><h2>${selected[0]}</h2></div>${chip(selected[4], selected[4])}</div>
@@ -804,6 +806,7 @@ function renderOrchestration() {
     <section class="orchestration-layout">
       <div class="glass agent-flow-stage">
         <div class="panel-head"><div><span class="kicker">AI orchestration center</span><h2>Nine-agent delivery pipeline</h2></div>${chip("data flowing", "good")}</div>
+        <div class="three-scene agents-three" data-three-scene="agents" data-scene-title="AI agent token flow"></div>
         <div class="agent-grid">
           ${agents
             .map(
@@ -868,6 +871,7 @@ function renderGalaxy() {
             <button class="button primary" data-galaxy-action="highlight">Impact path</button>
           </div>
         </div>
+        <div class="three-scene galaxy-three" data-three-scene="galaxy" data-scene-title="Traceability galaxy"></div>
         <div class="galaxy-viewport">
           <svg style="transform:translateX(${state.galaxyPanX}px) scale(${state.galaxyZoom})" class="galaxy-svg ${state.highlightImpact ? "highlight" : ""}" viewBox="0 0 1080 620" role="img" aria-label="Interactive traceability graph">
             ${visibleEdges
@@ -907,6 +911,10 @@ function renderGalaxy() {
 function renderSimulator() {
   return `
     <section class="simulator-layout">
+      <div class="glass impact-three-panel">
+        <div class="panel-head"><div><span class="kicker">3D impact engine</span><h2>Requirement change propagation</h2></div>${chip("animated heat path", "watch")}</div>
+        <div class="three-scene impact-three" data-three-scene="impact" data-scene-title="Change impact simulator"></div>
+      </div>
       <div class="glass version-card">
         <div class="panel-head tight"><div><span class="kicker">Requirement V1</span><h2>Baseline rule</h2></div>${chip("stable", "neutral")}</div>
         <p>Supervisor approval required for payment adjustments above 10,000.</p>
@@ -983,7 +991,8 @@ function renderBrain() {
     <section class="brain-layout">
       <div class="glass brain-stage">
         <div class="panel-head"><div><span class="kicker">Knowledge brain</span><h2>Private SDLC memory graph</h2></div>${chip("RAG citations online", "good")}</div>
-        ${miniKnowledgeGraph("brain")}
+        <div class="three-scene brain-three" data-three-scene="brain" data-scene-title="Knowledge neural network"></div>
+        <div class="scene-fallback">${miniKnowledgeGraph("brain")}</div>
       </div>
       <aside class="glass brain-side">
         <div class="panel-head tight"><div><span class="kicker">Selected memory</span><h2>${selected[0]}</h2></div>${chip(`${selected[2]}% fresh`, "good")}</div>
@@ -1560,14 +1569,15 @@ function renderPlatformAdminDashboard() {
     <section class="platform-admin-grid">
       <div class="glass platform-map">
         <div class="panel-head"><div><span class="kicker">Cross-project analytics</span><h2>Enterprise workload distribution</h2></div>${chip("global", "good")}</div>
-        <svg class="admin-topology" viewBox="0 0 980 440" role="img" aria-label="Multi-tenant platform topology">
+        <div class="three-scene topology-three" data-three-scene="topology" data-scene-title="Enterprise topology"></div>
+        <svg class="admin-topology scene-fallback" viewBox="0 0 980 440" role="img" aria-label="Multi-tenant platform topology">
           <defs><linearGradient id="adminFlow" x1="0" x2="1"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#34d399"/></linearGradient></defs>
           ${tenants.map((tenant, index) => `<path class="admin-edge" d="M170 220 C${310 + index * 64} ${70 + index * 42} ${500 + index * 30} ${340 - index * 36} ${720} ${100 + index * 76}"/>`).join("")}
           <g class="admin-node hub" transform="translate(170,220)"><circle r="64"></circle><text text-anchor="middle" y="-2">Platform</text><text text-anchor="middle" y="20">Admin</text></g>
           ${tenants.map(([name, orgs, teams, projects], index) => `<g class="admin-node" transform="translate(720,${100 + index * 76})"><rect x="-104" y="-28" width="208" height="56" rx="16"></rect><text text-anchor="middle" y="-3">${name}</text><text text-anchor="middle" y="16">${teams} / ${projects}</text></g>`).join("")}
         </svg>
       </div>
-      <aside class="glass phase-side" style="width: max-content;">
+      <aside class="glass phase-side">
         <div class="panel-head tight"><div><span class="kicker">Platform activity stream</span><h2>Global operations</h2></div></div>
         <div class="audit-log compact">
           ${["Azure OpenAI key rotated", "Northstar budget alert resolved", "QA Team model access updated", "Global prompt v7.2 approved"].map((item, index) => `<div><span>${item}</span><strong>${["Security", "Cost", "Access", "Prompt"][index]}</strong><small>${["now", "11m", "28m", "1h"][index]}</small></div>`).join("")}
@@ -1758,17 +1768,27 @@ function renderScreen(active) {
 
 function render() {
   const active = route();
-  document.body.className = "ai-os";
+  const webglClass = document.body.classList.contains("webgl-fallback")
+    ? "webgl-fallback"
+    : document.body.classList.contains("webgl-ready")
+      ? "webgl-ready"
+      : "";
+  document.body.className = ["ai-os", webglClass].filter(Boolean).join(" ");
   state.modal = null;
   state.activeLayer = layerForRoute(active).role;
+  renderShell(active);
+}
+
+function renderShell(active = route()) {
   app.innerHTML = shell(active, renderScreen(active));
+  window.SDLCVisuals?.refresh?.();
 }
 
 document.addEventListener("click", (event) => {
   const modalButton = event.target.closest("[data-modal]");
   if (modalButton) {
     state.modal = modalButton.dataset.modal;
-    app.innerHTML = shell(route(), renderScreen(route()));
+    renderShell();
     return;
   }
 
@@ -1777,25 +1797,26 @@ document.addEventListener("click", (event) => {
     const layer = navigationLayers.find((item) => item.role === layerButton.dataset.layer) || navigationLayers[0];
     state.activeLayer = layer.role;
     state.modal = null;
-    location.hash = layer.routes[0][0];
-    app.innerHTML = shell(route(), renderScreen(route()));
+    const nextHash = `#${layer.routes[0][0]}`;
+    if (location.hash === nextHash) render();
+    else location.hash = nextHash;
     return;
   }
 
   const closeButton = event.target.closest(".modal [data-close-modal]");
   if (closeButton || event.target.matches(".modal-backdrop[data-close-modal]")) {
     state.modal = null;
-    app.innerHTML = shell(route(), renderScreen(route()));
+    renderShell();
     return;
   }
 
   if (event.target.closest("[data-run]")) {
     state.toast = "AI simulation started. Streaming agents, trace links, and risk forecasts are updating.";
     state.tick += 1;
-    app.innerHTML = shell(route(), renderScreen(route()));
+    renderShell();
     window.setTimeout(() => {
       state.toast = "";
-      app.innerHTML = shell(route(), renderScreen(route()));
+      renderShell();
     }, 2600);
     return;
   }
@@ -1803,14 +1824,14 @@ document.addEventListener("click", (event) => {
   const twinNode = event.target.closest("[data-twin-node]");
   if (twinNode) {
     state.selectedTwin = twinNode.dataset.twinNode;
-    app.innerHTML = shell(route(), renderScreen(route()));
+    renderShell();
     return;
   }
 
   const galaxyNode = event.target.closest("[data-galaxy-node]");
   if (galaxyNode) {
     state.selectedGalaxy = galaxyNode.dataset.galaxyNode;
-    app.innerHTML = shell(route(), renderScreen(route()));
+    renderShell();
     return;
   }
 
@@ -1822,21 +1843,21 @@ document.addEventListener("click", (event) => {
     if (type === "pan") state.galaxyPanX = state.galaxyPanX > 0 ? -70 : state.galaxyPanX + 70;
     if (type === "expand") state.galaxyExpanded = !state.galaxyExpanded;
     if (type === "highlight") state.highlightImpact = !state.highlightImpact;
-    app.innerHTML = shell(route(), renderScreen(route()));
+    renderShell();
     return;
   }
 
   const brainSource = event.target.closest("[data-brain-source]");
   if (brainSource) {
     state.selectedBrain = brainSource.dataset.brainSource;
-    app.innerHTML = shell(route(), renderScreen(route()));
+    renderShell();
     return;
   }
 
   const archView = event.target.closest("[data-arch-view]");
   if (archView) {
     state.selectedArchitecture = archView.dataset.archView;
-    app.innerHTML = shell(route(), renderScreen(route()));
+    renderShell();
     return;
   }
 
@@ -1845,28 +1866,28 @@ document.addEventListener("click", (event) => {
     const [name, value] = viewSwitcher.dataset.viewSwitch.split(":");
     if (name === "portfolio") state.portfolioView = value;
     if (name === "sprint") state.sprintView = value;
-    app.innerHTML = shell(route(), renderScreen(route()));
+    renderShell();
     return;
   }
 
   const approval = event.target.closest("[data-approval-id]");
   if (approval) {
     state.selectedApproval = approval.dataset.approvalId;
-    app.innerHTML = shell(route(), renderScreen(route()));
+    renderShell();
     return;
   }
 
   const version = event.target.closest("[data-version-id]");
   if (version) {
     state.selectedVersion = version.dataset.versionId;
-    app.innerHTML = shell(route(), renderScreen(route()));
+    renderShell();
     return;
   }
 
   const integration = event.target.closest("[data-integration]");
   if (integration) {
     state.selectedIntegration = integration.dataset.integration;
-    app.innerHTML = shell(route(), renderScreen(route()));
+    renderShell();
   }
 });
 
