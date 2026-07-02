@@ -1875,6 +1875,7 @@ a {
 .phase-side {
   position: sticky;
   top: 110px;
+  width: 380px;
 }
 
 .phase-callouts {
@@ -2781,6 +2782,384 @@ a {
   border-color: rgba(8, 145, 178, 0.38);
 }
 
+.auth-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(420px, 1.05fr) minmax(360px, 0.95fr);
+  gap: 18px;
+  padding: 18px;
+}
+
+.auth-visual,
+.auth-card {
+  min-height: calc(100vh - 36px);
+  padding: clamp(24px, 4vw, 52px);
+}
+
+.auth-visual {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.auth-visual h1 {
+  max-width: 820px;
+  margin: 12px 0;
+  font-size: clamp(44px, 6vw, 82px);
+  line-height: 0.96;
+}
+
+.auth-visual p,
+.auth-card p {
+  color: var(--muted);
+  line-height: 1.65;
+  font-weight: 750;
+}
+
+.auth-flow {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(92px, 1fr));
+  gap: 10px;
+  margin-top: 32px;
+}
+
+.auth-flow div,
+.auth-field,
+.sso-button,
+.role-summary button,
+.profile-mini,
+.setup-grid div,
+.module-grid a,
+.enterprise-table div,
+.notification-list article,
+.settings-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(145deg, rgba(15, 23, 42, 0.72), rgba(8, 13, 28, 0.58)),
+    rgba(15, 23, 42, 0.58);
+}
+
+.auth-flow div {
+  min-height: 94px;
+  padding: 12px;
+  display: grid;
+  align-content: center;
+  gap: 8px;
+  color: var(--muted);
+}
+
+.auth-flow div.active {
+  color: var(--ink);
+  border-color: var(--line-strong);
+}
+
+.auth-flow span {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--cyan);
+  background: rgba(34, 211, 238, 0.12);
+  font-weight: 900;
+}
+
+.auth-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(180px, 1fr));
+  gap: 14px;
+  margin-top: 24px;
+}
+
+.auth-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.auth-card h2 {
+  margin: 8px 0 10px;
+  font-size: clamp(30px, 4vw, 48px);
+  line-height: 1;
+}
+
+.role-picker {
+  max-height: 330px;
+  overflow: auto;
+  display: grid;
+  gap: 8px;
+  margin: 18px 0;
+  padding-right: 4px;
+}
+
+.role-picker button {
+  min-height: 66px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--ink-2);
+  background: rgba(15, 23, 42, 0.58);
+  text-align: left;
+  cursor: pointer;
+}
+
+.role-picker button.active {
+  color: var(--ink);
+  border-color: var(--line-strong);
+  background:
+    linear-gradient(135deg, rgba(34, 211, 238, 0.14), rgba(167, 139, 250, 0.12)),
+    rgba(15, 23, 42, 0.82);
+}
+
+.role-picker span,
+.role-summary span,
+.role-summary small,
+.profile-mini span,
+.profile-mini small {
+  display: block;
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.auth-field {
+  display: grid;
+  gap: 7px;
+  padding: 11px 12px;
+  margin-top: 10px;
+}
+
+.auth-field span {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.auth-field input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  color: var(--ink);
+  background: transparent;
+  font-weight: 850;
+}
+
+.auth-actions,
+.profile-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.sso-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  color: var(--cyan);
+  font-weight: 900;
+}
+
+.sso-stack {
+  display: grid;
+  gap: 10px;
+  margin: 18px 0;
+}
+
+.sso-button {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px;
+  color: var(--ink-2);
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.mfa-code {
+  display: grid;
+  grid-template-columns: repeat(6, 48px);
+  gap: 9px;
+  margin: 20px 0;
+}
+
+.mfa-code span {
+  height: 56px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  color: var(--cyan);
+  background: rgba(34, 211, 238, 0.1);
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.role-summary {
+  margin: 18px 0 8px;
+}
+
+.role-summary button {
+  width: 100%;
+  min-height: 78px;
+  padding: 12px;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.profile-mini {
+  padding: 14px;
+  margin-bottom: 14px;
+}
+
+.admin-module-panel,
+.table-panel {
+  padding: 18px;
+  margin-bottom: 18px;
+}
+
+.module-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(190px, 1fr));
+  gap: 12px;
+}
+
+.module-grid.compact {
+  grid-template-columns: repeat(4, minmax(180px, 1fr));
+}
+
+.module-grid a {
+  min-height: 126px;
+  padding: 14px;
+  color: var(--ink-2);
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  transition: transform 0.18s, border-color 0.18s, background 0.18s;
+}
+
+.module-grid a:hover {
+  transform: translateY(-2px);
+  border-color: var(--line-strong);
+  background: rgba(15, 23, 42, 0.82);
+}
+
+.module-grid strong,
+.module-grid span {
+  display: block;
+}
+
+.module-grid span {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+  font-weight: 800;
+}
+
+.enterprise-table {
+  display: grid;
+  gap: 10px;
+}
+
+.enterprise-table div {
+  min-height: 64px;
+  display: grid;
+  grid-template-columns: minmax(160px, 1.1fr) minmax(130px, 1fr) minmax(130px, 1fr) minmax(120px, 0.7fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+}
+
+.artifact-table div {
+  grid-template-columns: 120px minmax(220px, 1fr) 150px auto;
+}
+
+.api-table div {
+  grid-template-columns: minmax(180px, 1fr) minmax(150px, 0.8fr) minmax(150px, 0.8fr) auto auto;
+}
+
+.enterprise-table span,
+.enterprise-table small {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.setup-grid,
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.setup-grid div {
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  color: var(--ink-2);
+  font-weight: 850;
+}
+
+.notification-center {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 18px;
+}
+
+.notification-list {
+  padding: 18px;
+}
+
+.notification-list article {
+  min-height: 74px;
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+.notification-list article > span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.notification-list p,
+.settings-card p,
+.structure-card p {
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+  font-weight: 800;
+}
+
+.settings-card {
+  min-height: 166px;
+  padding: 16px;
+}
+
+.settings-card header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.settings-card h3 {
+  margin: 3px 0 0;
+}
+
 .impact-three-panel {
   grid-column: 1 / -1;
   padding: 18px;
@@ -3166,6 +3545,7 @@ a {
   }
 
   .hero-grid,
+  .auth-shell,
   .orchestration-layout,
   .galaxy-layout,
   .brain-layout,
@@ -3180,9 +3560,16 @@ a {
   .governance-grid,
   .integration-grid,
   .knowledge-hub-grid,
+  .module-grid,
+  .module-grid.compact,
   .permission-grid,
   .prompt-library-grid {
     grid-template-columns: repeat(2, minmax(230px, 1fr));
+  }
+
+  .auth-visual,
+  .auth-card {
+    min-height: auto;
   }
 
   .tenant-card,
@@ -3233,6 +3620,7 @@ a {
   }
 
   .hero-grid,
+  .auth-shell,
   .studio-grid,
   .os-grid,
   .screen-grid,
@@ -3244,6 +3632,9 @@ a {
   .risk-layout,
   .knowledge-hub-layout,
   .integrations-layout,
+  .notification-center,
+  .settings-grid,
+  .setup-grid,
   .platform-admin-grid,
   .tenant-grid,
   .team-management-grid,
@@ -3296,7 +3687,18 @@ a {
   .approval-grid,
   .risk-matrix,
   .notification-strip,
+  .auth-flow,
+  .auth-metrics,
+  .module-grid,
+  .module-grid.compact,
   .routing-table div {
+    grid-template-columns: 1fr;
+  }
+
+  .enterprise-table div,
+  .artifact-table div,
+  .api-table div,
+  .notification-list article {
     grid-template-columns: 1fr;
   }
 
@@ -3335,6 +3737,7 @@ a {
   .roadmap-swimlanes,
   .permission-grid,
   .prompt-library-grid,
+  .mfa-code,
   .mobile-layer-switcher {
     grid-template-columns: 1fr;
   }

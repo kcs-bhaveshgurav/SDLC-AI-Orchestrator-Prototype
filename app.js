@@ -1,41 +1,242 @@
 const app = document.getElementById("app");
 
+const authRoutes = new Set(["splash", "welcome", "login", "forgot-password", "reset-password", "sso-login", "mfa"]);
+
 const navigationLayers = [
   {
     role: "Platform Admin",
+    user: "Bhavesh Gurav",
+    email: "bhavesh.gurav@sdlc.ai",
+    org: "Global Platform",
+    landing: "platform-admin",
     scope: "Global platform management",
     routes: [
       ["platform-admin", "AI Control Tower", "tower"],
-      ["tenants", "Tenant Management", "mission"],
+      ["organizations", "Organizations", "mission"],
       ["team-management", "Team Management", "orbit"],
+      ["user-management", "User Management", "shield"],
+      ["project-management", "Project Management", "schema"],
+      ["orchestration", "AI Orchestration", "flow"],
+      ["portfolio", "Project Portfolio", "forecast"],
       ["roles-permissions", "Roles Permissions", "shield"],
       ["ai-providers", "AI Providers", "brain"],
+      ["api-keys", "API Keys", "lock"],
       ["model-routing", "Model Routing", "flow"],
+      ["budget-management", "Budgets", "forecast"],
       ["usage-monitoring", "Usage Monitoring", "forecast"],
       ["enterprise-ai-governance", "AI Governance", "shield"],
-      ["cost-management", "Cost Management", "forecast"],
       ["enterprise-integrations", "Integrations", "schema"],
       ["enterprise-audit", "Audit Compliance", "scan"],
+      ["security-center", "Security Center", "lock"],
+      ["notifications", "Notifications", "mission"],
       ["global-knowledge", "Global Knowledge", "db"],
-      ["prompt-library", "Prompt Library", "doc"]
+      ["prompt-library", "Prompt Library", "doc"],
+      ["platform-settings", "Platform Settings", "schema"]
+    ]
+  },
+  {
+    role: "Organization Admin",
+    user: "Aesha Shah",
+    email: "aesha.shah@northstar.example",
+    org: "Northstar Enterprise",
+    landing: "org-dashboard",
+    scope: "Organization governance and delivery",
+    routes: [
+      ["org-dashboard", "Organization Dashboard", "tower"],
+      ["team-management", "Teams", "orbit"],
+      ["user-management", "Users", "shield"],
+      ["project-management", "Projects", "schema"],
+      ["portfolio", "Portfolio", "forecast"],
+      ["budget-management", "AI Budgets", "forecast"],
+      ["orchestration", "AI Orchestration", "flow"],
+      ["approvals", "Approvals", "flow"],
+      ["notifications", "Notifications", "mission"],
+      ["enterprise-audit", "Audit Logs", "scan"],
+      ["org-settings", "Organization Settings", "schema"]
     ]
   },
   {
     role: "Team Manager",
+    user: "Chaitanya Patil",
+    email: "chaitanya.patil@northstar.example",
+    org: "Northstar Enterprise",
+    landing: "team-workspace",
     scope: "Team workspace and delivery operations",
     routes: [
       ["team-workspace", "Team Workspace", "mission"],
+      ["project-management", "Create Projects", "schema"],
       ["portfolio", "Portfolio Center", "forecast"],
       ["approvals", "Approval Workflows", "flow"],
       ["delivery", "Sprint Delivery", "schema"],
       ["collaboration", "Collaboration", "mission"],
       ["risk", "Risk Intelligence", "scan"],
       ["roi", "Cost ROI Center", "forecast"],
-      ["knowledge-hub", "Team Knowledge", "db"]
+      ["knowledge-hub", "Team Knowledge", "db"],
+      ["notifications", "Notifications", "mission"],
+      ["profile-settings", "Profile Settings", "lock"]
+    ]
+  },
+  {
+    role: "Business Analyst",
+    user: "Samyak Ghagargunde",
+    email: "samyak.ghagargunde@northstar.example",
+    org: "Northstar Enterprise",
+    landing: "ba-dashboard",
+    scope: "Requirement analysis and BRD ownership",
+    routes: [
+      ["ba-dashboard", "BA Dashboard", "tower"],
+      ["project-workspace", "Project Workspace", "orbit"],
+      ["studio", "Requirement Studio", "scan"],
+      ["requirements", "Requirements", "doc"],
+      ["brds", "BRDs", "doc"],
+      ["versions", "Requirement Versions", "doc"],
+      ["approvals", "Approvals", "flow"],
+      ["documents", "Documents", "doc"],
+      ["discussions", "Discussions", "mission"],
+      ["activity-timeline", "Activity Timeline", "scan"],
+      ["notifications", "Notifications", "mission"],
+      ["profile-settings", "Profile Settings", "lock"]
+    ]
+  },
+  {
+    role: "Product Owner",
+    user: "Shailesh Rajput",
+    email: "shailesh.rajput@northstar.example",
+    org: "Northstar Enterprise",
+    landing: "po-dashboard",
+    scope: "Product decisions, PRDs, stories, releases",
+    routes: [
+      ["po-dashboard", "Product Dashboard", "tower"],
+      ["project-workspace", "Project Workspace", "orbit"],
+      ["prds", "PRDs", "schema"],
+      ["user-stories", "User Stories", "flow"],
+      ["delivery", "Sprint Delivery", "schema"],
+      ["approvals", "Approvals", "flow"],
+      ["galaxy", "Traceability", "galaxy"],
+      ["reports", "Reports", "forecast"],
+      ["notifications", "Notifications", "mission"],
+      ["profile-settings", "Profile Settings", "lock"]
+    ]
+  },
+  {
+    role: "Architect",
+    user: "Kapil Monini",
+    email: "kapil.monini@northstar.example",
+    org: "Northstar Enterprise",
+    landing: "architect-dashboard",
+    scope: "Architecture, technical standards, impact review",
+    routes: [
+      ["architect-dashboard", "Architect Dashboard", "tower"],
+      ["architect", "AI Architect Studio", "schema"],
+      ["architecture", "Architecture", "orbit"],
+      ["brain", "Knowledge Brain", "brain"],
+      ["impact-engine", "Impact Engine", "spark"],
+      ["approvals", "Approvals", "flow"],
+      ["documents", "Documents", "doc"],
+      ["activity-timeline", "Activity Timeline", "scan"],
+      ["notifications", "Notifications", "mission"],
+      ["profile-settings", "Profile Settings", "lock"]
+    ]
+  },
+  {
+    role: "Developer",
+    user: "Akshay Hadiya",
+    email: "akshay.hadiya@northstar.example",
+    org: "Northstar Enterprise",
+    landing: "developer-dashboard",
+    scope: "Prompts, implementation tasks, delivery sync",
+    routes: [
+      ["developer-dashboard", "Developer Dashboard", "tower"],
+      ["project-workspace", "Project Workspace", "orbit"],
+      ["developer-prompts", "Developer Prompts", "code"],
+      ["architecture", "Architecture", "schema"],
+      ["delivery", "Sprint Delivery", "schema"],
+      ["enterprise-integrations", "Integrations", "schema"],
+      ["documents", "Documents", "doc"],
+      ["activity-timeline", "Activity Timeline", "scan"],
+      ["notifications", "Notifications", "mission"],
+      ["profile-settings", "Profile Settings", "lock"]
+    ]
+  },
+  {
+    role: "QA Engineer",
+    user: "Warish Kumar",
+    email: "warish.kumar@northstar.example",
+    org: "Northstar Enterprise",
+    landing: "qa-dashboard",
+    scope: "QA coverage, tests, evidence, approvals",
+    routes: [
+      ["qa-dashboard", "QA Dashboard", "tower"],
+      ["qa-center", "QA Center", "shield"],
+      ["galaxy", "Traceability", "galaxy"],
+      ["impact-engine", "Impact Engine", "spark"],
+      ["approvals", "Approvals", "flow"],
+      ["reports", "Reports", "forecast"],
+      ["documents", "Documents", "doc"],
+      ["notifications", "Notifications", "mission"],
+      ["profile-settings", "Profile Settings", "lock"]
+    ]
+  },
+  {
+    role: "DevOps Engineer",
+    user: "Ashwini Patil",
+    email: "ashwini.patil@northstar.example",
+    org: "Northstar Enterprise",
+    landing: "devops-dashboard",
+    scope: "Deployments, integrations, release operations",
+    routes: [
+      ["devops-dashboard", "DevOps Dashboard", "tower"],
+      ["devops-center", "DevOps Center", "schema"],
+      ["enterprise-integrations", "Integrations", "schema"],
+      ["delivery", "Delivery", "forecast"],
+      ["enterprise-audit", "Audit Logs", "scan"],
+      ["security-center", "Security Center", "lock"],
+      ["notifications", "Notifications", "mission"],
+      ["profile-settings", "Profile Settings", "lock"]
+    ]
+  },
+  {
+    role: "Executive",
+    user: "Ganesh Kushwaha",
+    email: "ganesh.kushwaha@northstar.example",
+    org: "Northstar Enterprise",
+    landing: "warroom",
+    scope: "Executive analytics and portfolio outcomes",
+    routes: [
+      ["warroom", "Executive War Room", "forecast"],
+      ["portfolio", "Project Portfolio", "forecast"],
+      ["roi", "Cost ROI", "forecast"],
+      ["risk", "Risk Intelligence", "scan"],
+      ["usage-monitoring", "AI Usage", "brain"],
+      ["reports", "Reports", "doc"],
+      ["notifications", "Notifications", "mission"],
+      ["profile-settings", "Profile Settings", "lock"]
+    ]
+  },
+  {
+    role: "Read-only User",
+    user: "Jhanvi Asodiya",
+    email: "jhanvi.asodiya@northstar.example",
+    org: "Northstar Enterprise",
+    landing: "readonly-dashboard",
+    scope: "Read-only project and report access",
+    routes: [
+      ["readonly-dashboard", "Read-only Dashboard", "tower"],
+      ["project-workspace", "Project Workspace", "orbit"],
+      ["reports", "Reports", "forecast"],
+      ["documents", "Documents", "doc"],
+      ["galaxy", "Traceability", "galaxy"],
+      ["brain", "Knowledge Brain", "brain"],
+      ["notifications", "Notifications", "mission"],
+      ["profile-settings", "Profile Settings", "lock"]
     ]
   },
   {
     role: "Project User",
+    user: "Atul Jamode",
+    email: "atul.jamode@northstar.example",
+    org: "Northstar Enterprise",
+    landing: "project-workspace",
     scope: "Independent project workspace",
     routes: [
       ["project-workspace", "Project Workspace", "orbit"],
@@ -55,7 +256,7 @@ const navigationLayers = [
   }
 ];
 
-const routes = navigationLayers.flatMap((layer) => layer.routes);
+const routes = [...new Map(navigationLayers.flatMap((layer) => layer.routes).map((item) => [item[0], item])).values()];
 
 const icons = {
   mission: '<path d="M12 3v4"/><path d="M12 17v4"/><path d="M3 12h4"/><path d="M17 12h4"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.6"/>',
@@ -82,8 +283,13 @@ const icons = {
 };
 
 const state = {
+  isAuthenticated: false,
+  currentRole: "Platform Admin",
+  selectedLoginRole: "Platform Admin",
+  authLoading: false,
   modal: null,
   toast: "",
+  toastTimer: null,
   tick: 0,
   activeLayer: "Platform Admin",
   selectedTwin: "REQ-102",
@@ -204,21 +410,21 @@ const architectureViews = {
 };
 
 const phaseProjects = [
-  ["Omni-Claims", "Northstar Insurance", "Active", 94, 78, "Claims Modernization", "Aug 21", "Maya Chen"],
-  ["Retail Lending", "Cedar Bank", "Review", 86, 64, "Digital Lending", "Sep 04", "Arjun Patel"],
-  ["Trial Workspace", "HelioPharma", "At Risk", 71, 48, "Clinical AI", "Jul 15", "Nora Ellis"],
-  ["Partner Marketplace", "Atlas Cloud", "Active", 89, 83, "Platform Growth", "Oct 02", "Iris Morgan"],
-  ["Field Assist", "MetroGrid", "Planning", 79, 56, "Ops Intelligence", "Nov 11", "Leo Hart"],
-  ["Trade Compliance", "Mariner Logistics", "Active", 88, 69, "Regulatory Automation", "Sep 28", "Samira Reed"]
+  ["Omni-Claims", "Northstar Insurance", "Active", 94, 78, "Claims Modernization", "Aug 21", "Samyak Ghagargunde"],
+  ["Retail Lending", "Cedar Bank", "Review", 86, 64, "Digital Lending", "Sep 04", "Shailesh Rajput"],
+  ["Trial Workspace", "HelioPharma", "At Risk", 71, 48, "Clinical AI", "Jul 15", "Warish Kumar"],
+  ["Partner Marketplace", "Atlas Cloud", "Active", 89, 83, "Platform Growth", "Oct 02", "Akshay Hadiya"],
+  ["Field Assist", "MetroGrid", "Planning", 79, 56, "Ops Intelligence", "Nov 11", "Ashwini Patil"],
+  ["Trade Compliance", "Mariner Logistics", "Active", 88, 69, "Regulatory Automation", "Sep 28", "Kapil Monini"]
 ];
 
 const approvals = [
-  ["REQ-102", "Requirements", "Maya Chen", "Compliance", "Pending", "2h", "Payment threshold change needs policy owner signoff."],
-  ["BRD-4.2", "BRD", "Raj Iyer", "Business Sponsor", "Escalated", "18h", "Exception process language requires executive approval."],
-  ["PRD-F12", "PRD", "Arjun Patel", "Product Council", "Pending", "5h", "Feature scope expanded for jurisdiction variants."],
-  ["US-88", "User Stories", "Nora Ellis", "QA Lead", "Approved", "1d", "Acceptance criteria verified against trace links."],
-  ["ARCH-07", "Architecture", "Leo Hart", "Architecture Board", "Pending", "9h", "Policy engine topology awaiting security review."],
-  ["TC-311", "Test Cases", "Samira Reed", "Security", "Approved", "3h", "Boundary and tampering tests accepted."]
+  ["REQ-102", "Requirements", "Samyak Ghagargunde", "Compliance", "Pending", "2h", "Payment threshold change needs policy owner signoff."],
+  ["BRD-4.2", "BRD", "Chaitanya Patil", "Business Sponsor", "Escalated", "18h", "Exception process language requires executive approval."],
+  ["PRD-F12", "PRD", "Shailesh Rajput", "Product Council", "Pending", "5h", "Feature scope expanded for jurisdiction variants."],
+  ["US-88", "User Stories", "Warish Kumar", "QA Lead", "Approved", "1d", "Acceptance criteria verified against trace links."],
+  ["ARCH-07", "Architecture", "Kapil Monini", "Architecture Board", "Pending", "9h", "Policy engine topology awaiting security review."],
+  ["TC-311", "Test Cases", "Ashwini Patil", "Security", "Approved", "3h", "Boundary and tampering tests accepted."]
 ];
 
 const requirementVersions = [
@@ -245,16 +451,16 @@ const modelMetrics = [
 const auditEvents = [
   ["AI decision logged", "Requirement Agent", "REQ-102 split into 4 atomic requirements", "Immutable", "09:14"],
   ["Approval escalated", "Workflow Engine", "BRD-4.2 routed to executive sponsor", "SLA breach", "10:26"],
-  ["Document restored", "Maya Chen", "PRD v2 restored for comparison", "Governed", "11:03"],
-  ["Prompt exported", "Leo Hart", "Backend architecture prompt sent to GitHub", "Synced", "11:48"],
+  ["Document restored", "Samyak Ghagargunde", "PRD v2 restored for comparison", "Governed", "11:03"],
+  ["Prompt exported", "Akshay Hadiya", "Backend architecture prompt sent to GitHub", "Synced", "11:48"],
   ["Compliance report generated", "Audit Bot", "SOC 2 evidence pack created", "Complete", "12:20"]
 ];
 
 const collaborationThreads = [
-  ["Maya Chen", "@Leo can Architecture Agent include jurisdiction-specific policy routing?", "REQ-102", "Open"],
-  ["Leo Hart", "Added an event topology option and linked it to ARCH-07.", "ARCH-07", "Resolved"],
-  ["Nora Ellis", "@Samira please review tampering tests before release freeze.", "TC-318", "Open"],
-  ["Samira Reed", "Approved with one note: redact claim amount in debug logs.", "SEC-12", "Review"]
+  ["Samyak Ghagargunde", "@Kapil can Architecture Agent include jurisdiction-specific policy routing?", "REQ-102", "Open"],
+  ["Kapil Monini", "Added an event topology option and linked it to ARCH-07.", "ARCH-07", "Resolved"],
+  ["Warish Kumar", "@Ashwini please review tampering tests before release freeze.", "TC-318", "Open"],
+  ["Ashwini Patil", "Approved with one note: redact claim amount in debug logs.", "SEC-12", "Review"]
 ];
 
 const riskSignals = [
@@ -299,11 +505,11 @@ const tenants = [
 ];
 
 const enterpriseTeams = [
-  ["Business Analysis Team", "Maya Chen", "$18K", "42 projects", "86%", "BRDs, PRDs, requirement quality"],
-  ["Development Team", "Leo Hart", "$32K", "31 projects", "79%", "Developer prompts, APIs, code handoff"],
-  ["QA Team", "Nora Ellis", "$21K", "37 projects", "92%", "Test generation, coverage, regression"],
-  ["DevOps Team", "Iris Morgan", "$14K", "19 projects", "74%", "Pipelines, deployment, integration sync"],
-  ["Architecture Team", "Samira Reed", "$26K", "24 projects", "88%", "Architecture, security, governance"]
+  ["Business Analysis Team", "Samyak Ghagargunde", "$18K", "42 projects", "86%", "BRDs, PRDs, requirement quality"],
+  ["Development Team", "Akshay Hadiya", "$32K", "31 projects", "79%", "Developer prompts, APIs, code handoff"],
+  ["QA Team", "Warish Kumar", "$21K", "37 projects", "92%", "Test generation, coverage, regression"],
+  ["DevOps Team", "Ashwini Patil", "$14K", "19 projects", "74%", "Pipelines, deployment, integration sync"],
+  ["Architecture Team", "Kapil Monini", "$26K", "24 projects", "88%", "Architecture, security, governance"]
 ];
 
 const providers = [
@@ -332,7 +538,7 @@ const rolePermissions = [
   ["Developer", "Implementation", "Use prompts, update tasks, sync code systems"],
   ["QA Engineer", "Quality", "Generate tests, validate coverage, approve QA evidence"],
   ["DevOps Engineer", "Operations", "Configure pipelines, deployment, integration workflows"],
-  ["Viewer", "Read only", "View dashboards, artifacts, traceability, reports"]
+  ["Read-only User", "Read only", "View dashboards, artifacts, traceability, reports"]
 ];
 
 const promptLibraries = [
@@ -348,15 +554,34 @@ function icon(name) {
 }
 
 function route() {
-  return location.hash.replace("#", "") || "platform-admin";
+  const hash = location.hash.replace("#", "");
+  if (hash) return hash;
+  return state?.isAuthenticated ? activeRoleConfig().landing : "splash";
+}
+
+function roleByName(roleName) {
+  return navigationLayers.find((layer) => layer.role === roleName) || navigationLayers[0];
+}
+
+function activeRoleConfig() {
+  return roleByName(state.currentRole);
 }
 
 function layerForRoute(routeId) {
-  return navigationLayers.find((layer) => layer.routes.some(([id]) => id === routeId)) || navigationLayers[0];
+  return navigationLayers.find((layer) => layer.routes.some(([id]) => id === routeId)) || activeRoleConfig();
 }
 
 function activeNavigationLayer() {
-  return navigationLayers.find((layer) => layer.role === state.activeLayer) || navigationLayers[0];
+  return activeRoleConfig();
+}
+
+function canAccess(routeId) {
+  if (authRoutes.has(routeId)) return true;
+  return activeRoleConfig().routes.some(([id]) => id === routeId);
+}
+
+function routeLabel(routeId) {
+  return routes.find(([id]) => id === routeId)?.[1] || "AI Command Center";
 }
 
 function clamp(value, min, max) {
@@ -507,27 +732,22 @@ function miniWorkflowGraph() {
 }
 
 function shell(active, content) {
-  const activeLabel = routes.find(([id]) => id === active)?.[1] || "AI Command Center";
+  const activeLabel = routeLabel(active);
   const currentLayer = activeNavigationLayer();
   return `
     <div class="app-frame">
       <aside class="rail glass">
-        <a class="brand" href="#platform-admin">
+        <a class="brand" href="#${currentLayer.landing}">
           <span>${icon("spark")}</span>
           <strong>SDLC AI</strong>
           <small>Orchestrator OS</small>
         </a>
-        <div class="layer-switcher">
-          ${navigationLayers
-            .map(
-              (layer) => `
-                <button class="${state.activeLayer === layer.role ? "active" : ""}" data-layer="${layer.role}">
-                  <strong>${layer.role}</strong>
-                  <span>${layer.scope}</span>
-                </button>
-              `
-            )
-            .join("")}
+        <div class="role-summary">
+          <button data-modal="profile">
+            <strong>${currentLayer.user}</strong>
+            <span>${currentLayer.role}</span>
+            <small>${currentLayer.org}</small>
+          </button>
         </div>
         <nav>
           <p>${currentLayer.role}</p>
@@ -556,13 +776,15 @@ function shell(active, content) {
             <h1>${activeLabel}</h1>
           </div>
           <div class="tenant-context">
-            <span>Tenant</span>
-            <strong>Northstar Enterprise</strong>
+            <span>${currentLayer.role}</span>
+            <strong>${currentLayer.org}</strong>
           </div>
           <label class="global-search">
             ${icon("search")}
             <input value="Ask across tenants, teams, projects, artifacts, approvals, and AI usage" readonly />
           </label>
+          <a class="icon-button" href="#notifications" aria-label="Open notifications">${icon("mission")}</a>
+          <button class="icon-button" data-modal="profile" aria-label="Open profile">${icon("lock")}</button>
           <button class="button quiet" data-modal="blueprint">${icon("schema")} Blueprint</button>
           <button class="button primary" data-run>${icon("play")} Simulate AI run</button>
         </header>
@@ -581,11 +803,26 @@ function renderModal(type) {
       <div class="modal-backdrop" data-close-modal>
         <section class="modal glass">
           <header><h2>${currentLayer.role}</h2><button class="icon-button" data-close-modal>${icon("plus")}</button></header>
-          <div class="mobile-layer-switcher">
-            ${navigationLayers.map((layer) => `<button class="${state.activeLayer === layer.role ? "active" : ""}" data-layer="${layer.role}" data-close-modal>${layer.role}</button>`).join("")}
-          </div>
+          <div class="profile-mini"><strong>${currentLayer.user}</strong><span>${currentLayer.email}</span><small>${currentLayer.org}</small></div>
           <div class="mobile-menu">
             ${currentLayer.routes.map(([id, label, iconName]) => `<a href="#${id}" data-close-modal>${icon(iconName)} ${label}</a>`).join("")}
+          </div>
+        </section>
+      </div>
+    `;
+  }
+
+  if (type === "profile") {
+    const currentLayer = activeNavigationLayer();
+    return `
+      <div class="modal-backdrop" data-close-modal>
+        <section class="modal glass">
+          <header><div><span class="kicker">Signed in</span><h2>${currentLayer.user}</h2></div><button class="icon-button" data-close-modal>${icon("plus")}</button></header>
+          <div class="profile-mini"><strong>${currentLayer.role}</strong><span>${currentLayer.email}</span><small>${currentLayer.org}</small></div>
+          <div class="profile-actions">
+            <a class="button quiet" href="#profile-settings" data-close-modal>${icon("lock")} Profile settings</a>
+            <a class="button quiet" href="#notifications" data-close-modal>${icon("mission")} Notifications</a>
+            <button class="button primary" data-logout>${icon("arrow")} Log out</button>
           </div>
         </section>
       </div>
@@ -614,6 +851,140 @@ function renderModal(type) {
           </article>
         </div>
       </section>
+    </div>
+  `;
+}
+
+function renderAuthScreen(active) {
+  const selectedRole = roleByName(state.selectedLoginRole);
+  const authCopy = {
+    splash: ["Enterprise AI Delivery Platform", "Convert requirements into governed delivery artifacts through role-aware AI workflows."],
+    welcome: ["Welcome to SDLC AI Orchestrator", "Choose the role you want to demonstrate and enter a production-style workspace."],
+    login: ["Secure sign in", "Use enterprise credentials, SSO, and MFA to access your role-based workspace."],
+    "forgot-password": ["Recover access", "Send a secure reset link to your enterprise email address."],
+    "reset-password": ["Reset password", "Create a new password and return to secure sign in."],
+    "sso-login": ["Single sign-on", "Continue with the organization's identity provider."],
+    mfa: ["Multi-factor verification", "Enter the mock verification code to complete sign in."]
+  };
+  const [title, body] = authCopy[active] || authCopy.splash;
+  return `
+    <main class="auth-shell">
+      <section class="auth-visual glass">
+        <span class="kicker">SDLC AI Orchestrator</span>
+        <h1>${title}</h1>
+        <p>${body}</p>
+        <div class="auth-flow">
+          ${["Authenticate", "Authorize", "Orchestrate", "Trace", "Govern"].map((item, index) => `<div class="${index < 2 ? "active" : ""}"><span>${index + 1}</span><strong>${item}</strong></div>`).join("")}
+        </div>
+        <div class="auth-metrics">
+          ${metric("Traceability", "96%", "enterprise coverage", "cyan")}
+          ${metric("Governance", "SOC2", "audit-ready", "green")}
+        </div>
+      </section>
+      <section class="auth-card glass">
+        ${renderAuthPanel(active, selectedRole)}
+      </section>
+    </main>
+  `;
+}
+
+function renderAuthPanel(active, selectedRole) {
+  if (active === "splash") {
+    return `
+      <span class="kicker">AI-native SDLC</span>
+      <h2>Operate software delivery as a governed AI workflow.</h2>
+      <p>Start with authentication, select a role, and move through the enterprise demo flow from platform administration to project delivery.</p>
+      <div class="auth-actions">
+        <a class="button primary" href="#welcome">${icon("play")} Launch platform</a>
+        <a class="button quiet" href="#login">${icon("lock")} Sign in</a>
+      </div>
+    `;
+  }
+
+  if (active === "welcome") {
+    return `
+      <span class="kicker">Role-aware demo</span>
+      <h2>Select a workspace role.</h2>
+      <p>Each role has a unique dashboard, sidebar, permissions, and visible modules.</p>
+      ${renderRolePicker()}
+      <div class="auth-actions">
+        <a class="button primary" href="#login">${icon("arrow")} Continue as ${selectedRole.role}</a>
+        <a class="button quiet" href="#sso-login">${icon("shield")} Use SSO</a>
+      </div>
+    `;
+  }
+
+  if (active === "forgot-password") {
+    return `
+      <span class="kicker">Account recovery</span>
+      <h2>Send reset link.</h2>
+      <label class="auth-field"><span>Email</span><input value="${selectedRole.email}" readonly /></label>
+      <div class="auth-actions">
+        <a class="button primary" href="#reset-password">${icon("arrow")} Send secure link</a>
+        <a class="button quiet" href="#login">Back to login</a>
+      </div>
+    `;
+  }
+
+  if (active === "reset-password") {
+    return `
+      <span class="kicker">Password reset</span>
+      <h2>Create a new password.</h2>
+      <label class="auth-field"><span>New password</span><input value="Enterprise-demo-2026" type="password" readonly /></label>
+      <label class="auth-field"><span>Confirm password</span><input value="Enterprise-demo-2026" type="password" readonly /></label>
+      <div class="auth-actions">
+        <a class="button primary" href="#login">${icon("shield")} Update password</a>
+      </div>
+    `;
+  }
+
+  if (active === "sso-login") {
+    return `
+      <span class="kicker">Enterprise SSO</span>
+      <h2>Continue with identity provider.</h2>
+      <p>SSO validates organization membership, role claims, and conditional access policy before opening the workspace.</p>
+      ${renderRolePicker()}
+      <div class="sso-stack">
+        ${["Microsoft Entra ID", "Okta", "Google Workspace"].map((item) => `<button class="sso-button" data-auth-action="sso">${icon("shield")} ${item}</button>`).join("")}
+      </div>
+      <a class="button quiet" href="#login">Use email instead</a>
+    `;
+  }
+
+  if (active === "mfa") {
+    return `
+      <span class="kicker">MFA challenge</span>
+      <h2>Verify ${selectedRole.role} access.</h2>
+      <p>A mock six-digit code has been sent to ${selectedRole.email}.</p>
+      <div class="mfa-code"><span>4</span><span>2</span><span>8</span><span>6</span><span>1</span><span>9</span></div>
+      <div class="auth-actions">
+        <button class="button primary" data-auth-action="complete-login">${icon("lock")} Verify and enter</button>
+        <a class="button quiet" href="#login">Back</a>
+      </div>
+    `;
+  }
+
+  return `
+    <span class="kicker">Secure login</span>
+    <h2>Sign in as ${selectedRole.role}.</h2>
+    ${renderRolePicker()}
+    <label class="auth-field"><span>Email</span><input value="${selectedRole.email}" readonly /></label>
+    <label class="auth-field"><span>Password</span><input value="enterprise-demo" type="password" readonly /></label>
+    <div class="auth-actions">
+      <button class="button primary" data-auth-action="login">${icon("lock")} Continue</button>
+      <a class="button quiet" href="#forgot-password">Forgot password</a>
+    </div>
+    <a class="sso-link" href="#sso-login">${icon("shield")} Continue with SSO</a>
+  `;
+}
+
+function renderRolePicker() {
+  return `
+    <div class="role-picker">
+      ${navigationLayers
+        .filter((role) => role.role !== "Project User")
+        .map((role) => `<button class="${state.selectedLoginRole === role.role ? "active" : ""}" data-login-role="${role.role}"><strong>${role.role}</strong><span>${role.scope}</span></button>`)
+        .join("")}
     </div>
   `;
 }
@@ -1269,13 +1640,13 @@ function renderApprovals() {
       <div class="glass phase-main">
         <div class="panel-head"><div><span class="kicker">Approval chain</span><h2>${selected[0]} routing path</h2></div>${chip(selected[4], selected[4] === "Escalated" ? "risk" : selected[4] === "Approved" ? "good" : "watch")}</div>
         <svg class="approval-chain" viewBox="0 0 920 260" role="img" aria-label="Approval routing chain">
-          ${["Author", "AI Review", selected[3], "Governance", "Final Approval"]
+          ${["Business Analyst", "Manager", "Product Owner", "Architecture", "QA Approval", "Executive"]
             .map((step, index) => {
-              const x = 96 + index * 178;
+              const x = 74 + index * 154;
               return `
-                ${index ? `<path class="flow-edge" d="M${x - 124} 132 C${x - 78} 88 ${x - 54} 176 ${x - 26} 132"/>` : ""}
+                ${index ? `<path class="flow-edge" d="M${x - 108} 132 C${x - 78} 88 ${x - 50} 176 ${x - 28} 132"/>` : ""}
                 <g class="approval-node ${index < 2 ? "done" : index === 2 ? "current" : ""}" transform="translate(${x},132)">
-                  <circle r="42"></circle>
+                  <circle r="38"></circle>
                   <text text-anchor="middle" y="5">${step}</text>
                 </g>
               `;
@@ -1469,7 +1840,7 @@ function renderCollaboration() {
         </div>
       </aside>
       <div class="glass notification-strip">
-        ${["Nora assigned QA review", "Samira mentioned in SEC-12", "Architecture board requested update", "Jira story sync complete"].map((item) => `<div>${icon("mission")} ${item}</div>`).join("")}
+        ${["Warish assigned QA review", "Ashwini mentioned in SEC-12", "Architecture board requested update", "Jira story sync complete"].map((item) => `<div>${icon("mission")} ${item}</div>`).join("")}
       </div>
     </section>
   `;
@@ -1565,6 +1936,25 @@ function renderPlatformAdminDashboard() {
       ${metric("Teams", "104", "12 created this month", "green")}
       ${metric("Projects", "427", "92 active workflows", "violet")}
       ${metric("Active users", "3,842", "87% adoption", "amber")}
+    </section>
+    <section class="glass admin-module-panel">
+      <div class="panel-head"><div><span class="kicker">Platform overview</span><h2>Enterprise administration modules</h2></div>${chip("role secured", "good")}</div>
+      <div class="module-grid compact">
+        ${[
+          ["organizations", "Organization Management", "Create orgs, assign admins, allocate budgets", "mission"],
+          ["team-management", "Team Management", "Create teams, managers, users, credits", "orbit"],
+          ["user-management", "User Management", "Invite users, roles, projects, account state", "shield"],
+          ["project-management", "Project Portfolio Setup", "Create projects, owners, AI workflow", "schema"],
+          ["ai-providers", "AI Provider Management", "OpenAI, Claude, Gemini, Azure OpenAI", "brain"],
+          ["api-keys", "API Key Management", "Secrets, rotation, scopes, fallback", "lock"],
+          ["model-routing", "Model Routing", "Policy, fallback, workload routing", "flow"],
+          ["budget-management", "Budget Management", "AI credits, forecasts, alerts", "forecast"],
+          ["enterprise-audit", "Audit Logs", "User activity and AI decisions", "scan"],
+          ["security-center", "Security Center", "MFA, SSO, PII, prompt policy", "lock"],
+          ["notifications", "Notifications", "Approvals, AI events, budget alerts", "mission"],
+          ["platform-settings", "Platform Settings", "Preferences, governance, security", "schema"]
+        ].map(([id, label, body, iconName]) => `<a href="#${id}">${icon(iconName)}<strong>${label}</strong><span>${body}</span></a>`).join("")}
+      </div>
     </section>
     <section class="platform-admin-grid">
       <div class="glass platform-map">
@@ -1709,10 +2099,27 @@ function renderTeamWorkspace() {
 }
 
 function renderProjectWorkspace() {
+  const modules = [
+    ["project-workspace", "Dashboard", "Project health, AI progress, cost, and delivery signals", "tower", 94],
+    ["requirements", "Requirements", "Versioned source requirements and upload history", "doc", 124],
+    ["brds", "BRDs", "Business requirements, RACI, assumptions, and approvals", "doc", 9],
+    ["prds", "PRDs", "Feature hierarchy, personas, priorities, and roadmap", "schema", 7],
+    ["user-stories", "User Stories", "Epics, acceptance criteria, story points, and sprint mapping", "flow", 42],
+    ["architecture", "Architecture", "System design, APIs, data model, and deployment topology", "orbit", 6],
+    ["developer-prompts", "Developer Prompts", "Backend, frontend, API, database, security, and deployment prompts", "code", 18],
+    ["qa-center", "QA Center", "Functional, security, performance, and edge-case coverage", "shield", 86],
+    ["galaxy", "Traceability", "Requirement to test evidence graph", "galaxy", 312],
+    ["impact-engine", "Change Impact", "Dependency paths and selective regeneration", "spark", 21],
+    ["reports", "Reports", "Executive, compliance, quality, and delivery reports", "forecast", 11],
+    ["documents", "Documents", "Uploaded docs, generated artifacts, and exported evidence", "doc", 68],
+    ["discussions", "Discussions", "Comments, mentions, reviews, and decisions", "mission", 37],
+    ["approvals", "Approvals", "Pending approvals, history, comments, and revisions", "flow", 14],
+    ["activity-timeline", "Activity Timeline", "User actions, AI events, syncs, and audit signals", "scan", 248]
+  ];
   return `
     ${phaseHero("Project workspace layer", "Each project is an independent AI delivery workspace.", "Projects contain requirements, BRDs, PRDs, stories, architecture, developer prompts, test cases, traceability, impact analysis, approvals, and reports.", "Open requirement studio", "#studio")}
     <section class="project-structure-grid">
-      ${["Requirements", "BRDs", "PRDs", "User Stories", "Architecture", "Developer Prompts", "Test Cases", "Traceability", "Impact Analysis", "Approvals", "Reports"].map((item, index) => `<article class="glass structure-card">${icon(["doc", "doc", "schema", "flow", "orbit", "code", "shield", "galaxy", "spark", "flow", "forecast"][index])}<strong>${item}</strong><span>${[124, 9, 7, 42, 6, 18, 86, 312, 21, 14, 11][index]} records</span></article>`).join("")}
+      ${modules.map(([routeId, item, summary, iconName, count]) => `<a href="#${routeId}" class="glass structure-card">${icon(iconName)}<strong>${item}</strong><span>${count} records</span><p>${summary}</p></a>`).join("")}
     </section>
     <section class="metric-strip wide">
       ${metric("Project health", "94%", "green delivery", "green")}
@@ -1723,23 +2130,302 @@ function renderProjectWorkspace() {
   `;
 }
 
+function renderRoleDashboard(roleName = state.currentRole) {
+  const role = roleByName(roleName);
+  const roleMetrics = {
+    "Organization Admin": [["Organizations", "1", "Northstar active", "cyan"], ["Teams", "12", "4 over target", "green"], ["AI budget", "$48K", "68% available", "violet"], ["Approvals", "9", "3 urgent", "amber"]],
+    "Business Analyst": [["Requirements", "124", "87% quality", "cyan"], ["BRDs", "9", "4 pending review", "green"], ["Ambiguities", "8", "needs SME input", "amber"], ["Trace links", "312", "96% coverage", "violet"]],
+    "Product Owner": [["PRDs", "7", "2 awaiting signoff", "cyan"], ["Stories", "42", "31 sprint-ready", "green"], ["Roadmap", "Q3", "on track", "violet"], ["Approvals", "5", "product council", "amber"]],
+    Architect: [["Architecture", "6", "views generated", "cyan"], ["Impact reviews", "21", "4 high risk", "amber"], ["Standards", "96", "docs indexed", "green"], ["Security", "91%", "policy match", "violet"]],
+    Developer: [["Prompts", "18", "ready for build", "cyan"], ["Tasks", "27", "Jira linked", "green"], ["APIs", "12", "contracts drafted", "violet"], ["Blockers", "2", "needs architecture", "amber"]],
+    "QA Engineer": [["Test cases", "86", "93% coverage", "green"], ["Security tests", "18", "4 new", "violet"], ["Regression", "72%", "suite ready", "cyan"], ["Defects", "6", "2 high", "amber"]],
+    "DevOps Engineer": [["Deploy plans", "6", "3 approved", "cyan"], ["Sync health", "94%", "Jira and ADO", "green"], ["Release risk", "Low", "1 dependency", "violet"], ["Audit events", "248", "immutable", "amber"]],
+    Executive: [["Cost savings", "$1.84M", "annualized", "green"], ["Productivity", "4.8x", "BA and QA lift", "cyan"], ["AI adoption", "87%", "active users", "violet"], ["Forecast", "19d", "pull-in", "amber"]],
+    "Read-only User": [["Accessible reports", "11", "read-only", "cyan"], ["Projects", "3", "assigned", "green"], ["Trace views", "312", "viewable links", "violet"], ["Exports", "0", "restricted", "amber"]]
+  };
+  const metrics = roleMetrics[role.role] || [["Projects", "28", "active portfolio", "cyan"], ["Users", "3,842", "87% adoption", "green"], ["AI spend", "$128K", "under budget", "violet"], ["Risk", "Low", "4 watch items", "amber"]];
+  return `
+    ${phaseHero(role.role, `${role.role} command dashboard`, `A role-specific workspace for ${role.scope.toLowerCase()}. Unauthorized modules are hidden and the sidebar only shows approved access.`, "Open notifications", "#notifications")}
+    <section class="metric-strip wide">
+      ${metrics.map(([label, value, delta, variant]) => metric(label, value, delta, variant)).join("")}
+    </section>
+    <section class="phase-layout">
+      <div class="glass phase-main">
+        <div class="panel-head"><div><span class="kicker">Accessible modules</span><h2>${role.role} navigation</h2></div>${chip(`${role.routes.length} modules`, "good")}</div>
+        <div class="module-grid compact">
+          ${role.routes.map(([id, label, iconName]) => `<a href="#${id}">${icon(iconName)}<strong>${label}</strong><span>${id}</span></a>`).join("")}
+        </div>
+      </div>
+      <aside class="glass phase-side">
+        <div class="panel-head tight"><div><span class="kicker">Permission posture</span><h2>Role-based access</h2></div></div>
+        ${bars([["Visible modules", 100, "green"], ["Restricted admin actions", role.role === "Platform Admin" ? 4 : 86, role.role === "Platform Admin" ? "cyan" : "amber"], ["Audit coverage", 94, "violet"], ["MFA policy", 100, "green"]])}
+      </aside>
+    </section>
+  `;
+}
+
+function renderOrganizationManagement() {
+  return `
+    ${phaseHero("Organization management", "Create, govern, activate, and fund enterprise organizations.", "Platform admins can create organizations, assign organization admins, allocate AI budgets, and monitor tenant analytics.", "Create organization", "#organizations")}
+    <section class="metric-strip wide">
+      ${metric("Organizations", "18", "16 active", "cyan")}
+      ${metric("AI budget", "$480K", "quarter allocation", "violet")}
+      ${metric("Org admins", "34", "2 pending invites", "green")}
+      ${metric("Compliance", "97%", "policy coverage", "amber")}
+    </section>
+    <section class="tenant-grid">
+      ${tenants.map(([name, orgs, teams, projects, spend, health]) => `<article class="glass tenant-card"><header><div><span class="kicker">${orgs}</span><h3>${name}</h3></div>${chip(health, health === "Healthy" ? "good" : health === "Watch" ? "watch" : "risk")}</header><p>Admin assigned, ${teams}, ${projects}, SSO enforced, AI budget monitored.</p>${bars([["AI budget", Number(spend.replace("$", "").replace("K", "")) * 4, "violet"], ["Analytics", health === "Healthy" ? 94 : 78, "cyan"], ["Activation", health === "Healthy" ? 100 : 72, "green"]])}<footer><span>Monthly spend</span><strong>${spend}</strong></footer></article>`).join("")}
+    </section>
+  `;
+}
+
+function renderUserManagement() {
+  const users = [
+    ["Bhavesh Gurav", "Platform Admin", "Platform Operations", "Global Platform", "Enabled", "MFA on"],
+    ["Aesha Shah", "Organization Admin", "Org Governance", "Northstar Enterprise", "Enabled", "SSO"],
+    ["Chaitanya Patil", "Team Manager", "Delivery PMO", "Portfolio", "Enabled", "MFA on"],
+    ["Samyak Ghagargunde", "Business Analyst", "BA Team", "Omni-Claims", "Enabled", "MFA on"],
+    ["Shailesh Rajput", "Product Owner", "Product Council", "Retail Lending", "Enabled", "SSO"],
+    ["Kapil Monini", "Architect", "Architecture", "Omni-Claims", "Enabled", "MFA on"],
+    ["Akshay Hadiya", "Developer", "Development", "Partner Marketplace", "Enabled", "MFA on"],
+    ["Warish Kumar", "QA Engineer", "QA Team", "Trade Compliance", "Invited", "Pending"],
+    ["Ashwini Patil", "DevOps Engineer", "DevOps", "Field Assist", "Enabled", "MFA on"],
+    ["Ganesh Kushwaha", "Executive", "Executive Office", "Portfolio", "Enabled", "SSO"],
+    ["Jhanvi Asodiya", "Read-only User", "Observer Group", "Reports", "Enabled", "Restricted"]
+  ];
+  return `
+    ${phaseHero("User management", "Invite users, assign roles, teams, projects, and access status.", "Admins can edit profiles, reset passwords, enable or disable accounts, and govern project-level access from one module.", "Invite user", "#user-management")}
+    <section class="metric-strip wide">
+      ${metric("Users", "3,842", "87% active", "cyan")}
+      ${metric("Pending invites", "28", "6 expire today", "amber")}
+      ${metric("MFA coverage", "96%", "policy enforced", "green")}
+      ${metric("Disabled", "14", "access removed", "violet")}
+    </section>
+    <section class="glass table-panel">
+      <div class="panel-head"><div><span class="kicker">User directory</span><h2>Profiles, roles, teams, and projects</h2></div>${chip("RBAC enforced", "good")}</div>
+      <div class="enterprise-table user-table">
+        ${users.map(([name, role, team, project, status, security]) => `<div><strong>${name}</strong><span>${role}</span><span>${team}</span><span>${project}</span>${chip(status, status === "Enabled" ? "good" : status === "Invited" ? "watch" : "risk")}<small>${security}</small></div>`).join("")}
+      </div>
+    </section>
+  `;
+}
+
+function renderProjectManagement() {
+  return `
+    ${phaseHero("Project management", "Create projects, assign owners, configure AI workflow, and connect knowledge sources.", "Team managers define project settings, add members, select AI agents, and attach project-specific knowledge before delivery begins.", "Create project", "#project-management")}
+    <section class="metric-strip wide">
+      ${metric("Projects", "427", "92 active workflows", "cyan")}
+      ${metric("Owners", "118", "mapped to teams", "green")}
+      ${metric("Knowledge sources", "642", "indexed", "violet")}
+      ${metric("Workflow presets", "12", "approved", "amber")}
+    </section>
+    <section class="phase-layout">
+      <div class="glass phase-main">
+        <div class="panel-head"><div><span class="kicker">Project setup</span><h2>Omni-Claims workspace configuration</h2></div>${chip("ready", "good")}</div>
+        <div class="setup-grid">
+          ${["Project owner: Shailesh Rajput", "Team members: 18", "AI workflow: 9-agent enterprise chain", "Knowledge: SOP-PAY-17, BRD library, secure coding", "Integrations: Jira, GitHub, Confluence", "Approval policy: full enterprise chain"].map((item) => `<div>${icon("schema")} ${item}</div>`).join("")}
+        </div>
+      </div>
+      <aside class="glass phase-side">
+        <div class="panel-head tight"><div><span class="kicker">Workflow configuration</span><h2>Enabled agents</h2></div></div>
+        ${bars([["Requirement", 100, "green"], ["BRD and PRD", 92, "cyan"], ["Developer prompts", 88, "violet"], ["QA and Security", 94, "amber"]])}
+      </aside>
+    </section>
+  `;
+}
+
+function renderApiKeyManagement() {
+  const keys = [["OpenAI production", "sk-prod-...82a", "Rotated 2d ago", "Healthy"], ["Azure OpenAI EU", "az-eu-...41c", "Rotates in 8d", "Healthy"], ["Claude Enterprise", "cl-ent-...19f", "Budget limited", "Watch"], ["Gemini QA route", "gm-qa-...77b", "Sandbox", "Healthy"]];
+  return `
+    ${phaseHero("API key management", "Secure provider credentials with rotation, scope, and budget policies.", "Administrators can manage API keys without exposing secrets to project teams.", "Rotate key", "#api-keys")}
+    <section class="glass table-panel">
+      <div class="panel-head"><div><span class="kicker">Provider credentials</span><h2>Scoped API key vault</h2></div>${chip("secrets masked", "good")}</div>
+      <div class="enterprise-table api-table">
+        ${keys.map(([name, key, age, status]) => `<div><strong>${name}</strong><span>${key}</span><span>${age}</span>${chip(status, status === "Healthy" ? "good" : "watch")}<button class="button quiet">Rotate</button></div>`).join("")}
+      </div>
+    </section>
+  `;
+}
+
+function renderBudgetManagement() {
+  return `
+    ${phaseHero("Budget management", "Allocate AI credits, enforce spend controls, and forecast usage.", "Budgets can be assigned by organization, team, project, provider, or workload.", "Adjust budget", "#budget-management")}
+    <section class="metric-strip wide">
+      ${metric("Monthly budget", "$146K", "$128K forecast", "cyan")}
+      ${metric("Credits allocated", "82%", "team budgets", "green")}
+      ${metric("Savings", "$18.4K", "cached routes", "violet")}
+      ${metric("Alerts", "6", "2 urgent", "amber")}
+    </section>
+    <section class="phase-layout">
+      <div class="glass phase-main">
+        <div class="panel-head"><div><span class="kicker">Budget allocation</span><h2>AI credits by team</h2></div>${chip("forecasting", "good")}</div>
+        ${bars([["Business Analysis", 72, "cyan"], ["Development", 64, "green"], ["QA", 81, "violet"], ["Architecture", 58, "amber"], ["DevOps", 43, "cyan"]])}
+      </div>
+      <aside class="glass phase-side">
+        <div class="panel-head tight"><div><span class="kicker">Cost controls</span><h2>Guardrails</h2></div></div>
+        <div class="phase-callouts"><div>${icon("shield")} Premium model approval required above $2,500 per run.</div><div>${icon("forecast")} Auto-route low-risk QA expansion to efficient model tier.</div></div>
+      </aside>
+    </section>
+  `;
+}
+
+function renderSecurityCenter() {
+  return `
+    ${phaseHero("Security center", "Identity, data, model, and audit controls for enterprise AI delivery.", "Monitor MFA, SSO, PII redaction, prompt policy, data retention, and audit export readiness.", "Review policy", "#security-center")}
+    <section class="metric-strip wide">
+      ${metric("MFA coverage", "96%", "conditional access", "green")}
+      ${metric("PII redaction", "31K", "fields protected", "cyan")}
+      ${metric("Policy alerts", "4", "1 high", "amber")}
+      ${metric("Audit readiness", "98%", "evidence export", "violet")}
+    </section>
+    <section class="glass permission-matrix">
+      <div class="panel-head"><div><span class="kicker">Security posture</span><h2>Controls and enforcement</h2></div>${chip("enterprise ready", "good")}</div>
+      <div class="permission-grid">
+        ${["SSO and MFA enforced for privileged roles", "Prompt vault masks credentials and secrets", "PII redaction runs before provider routing", "Audit logs record every AI decision", "Role permissions hide unauthorized modules", "Data retention policy applied per organization"].map((item) => `<article><strong>${item}</strong><span>Active control</span><p>Evidence is available in Audit Compliance Hub.</p></article>`).join("")}
+      </div>
+    </section>
+  `;
+}
+
+function renderNotificationCenter() {
+  const notifications = [
+    ["AI completed generation", "BRD Agent generated BRD-4.2 with 6 citations.", "now", "good"],
+    ["Approval request", "Product Owner review requested for PRD-F12.", "12m", "watch"],
+    ["Requirement update", "REQ-102 changed threshold and added risk override.", "28m", "risk"],
+    ["Team mention", "Warish mentioned you in QA boundary review.", "44m", "neutral"],
+    ["Budget alert", "Claude architecture route reached 82% monthly allocation.", "1h", "watch"],
+    ["System notification", "Azure OpenAI key rotation completed successfully.", "2h", "good"]
+  ];
+  return `
+    ${phaseHero("Notification center", "Every AI event, approval, mention, budget alert, and system message in one place.", "Users see only the notifications relevant to their role, team, and assigned projects.", "Mark all read", "#notifications")}
+    <section class="notification-center">
+      <div class="glass notification-list">
+        <div class="panel-head"><div><span class="kicker">Inbox</span><h2>Role-aware notifications</h2></div>${chip("6 unread", "watch")}</div>
+        ${notifications.map(([title, body, time, variant]) => `<article><span>${time}</span><div><strong>${title}</strong><p>${body}</p></div>${chip(variant === "neutral" ? "info" : variant, variant)}</article>`).join("")}
+      </div>
+      <aside class="glass phase-side">
+        <div class="panel-head tight"><div><span class="kicker">Delivery signal</span><h2>Notification mix</h2></div></div>
+        ${bars([["Approvals", 72, "amber"], ["AI events", 88, "green"], ["Mentions", 54, "cyan"], ["Budget alerts", 31, "violet"]])}
+      </aside>
+    </section>
+  `;
+}
+
+function renderSettingsCenter(kind = "Profile") {
+  const role = activeRoleConfig();
+  return `
+    ${phaseHero(`${kind} settings`, "Preferences, AI behavior, notifications, security, and activity history.", "Every user can manage personal settings while admins can govern platform and organization policies.", "Save settings", "#profile-settings")}
+    <section class="settings-grid">
+      ${[
+        ["Profile", `${role.user} / ${role.email}`, "Name, email, role, organization, and assigned projects."],
+        ["Preferences", "Dense enterprise layout", "Default workspace, landing page, and table density."],
+        ["Theme", "Dark executive mode", "Theme, motion, chart animation, and contrast preferences."],
+        ["AI preferences", "Citations required", "Preferred model tiers, tone, and generation guardrails."],
+        ["Notifications", "Approvals and AI events", "Email, in-app, Teams, and Slack preferences."],
+        ["Security", "MFA enabled", "Password, SSO session, trusted devices, and access history."],
+        ["Activity history", "248 actions", "Recent logins, approvals, exports, and AI generations."]
+      ].map(([title, value, body]) => `<article class="glass settings-card"><header>${icon(title === "Security" ? "lock" : title === "AI preferences" ? "brain" : "schema")}<div><span class="kicker">${title}</span><h3>${value}</h3></div></header><p>${body}</p></article>`).join("")}
+    </section>
+  `;
+}
+
+function renderArtifactModule(type) {
+  const configs = {
+    requirements: ["Requirements", "Source requirements, quality scores, versions, and validation status.", [["REQ-102", "Payment approval threshold", "87%", "Pending"], ["REQ-108", "Fraud review override", "82%", "Approved"], ["REQ-141", "Audit export retention", "91%", "Review"]]],
+    brds: ["BRDs", "Business requirements, assumptions, RACI, and approval evidence.", [["BRD-4.2", "Payment approval process", "94%", "Escalated"], ["BRD-4.3", "Exception handling", "91%", "Pending"], ["BRD-5.1", "Audit evidence", "96%", "Approved"]]],
+    prds: ["PRDs", "Feature hierarchy, personas, MoSCoW priority, and roadmap mapping.", [["PRD-F12", "Policy variant engine", "92%", "Pending"], ["PRD-F18", "Supervisor approval UX", "89%", "Approved"], ["PRD-F22", "Audit export center", "95%", "Review"]]],
+    "user-stories": ["User Stories", "Epics, stories, acceptance criteria, story points, and sprint assignment.", [["US-88", "Fraud-risk override rule", "8 pts", "Sprint 18"], ["US-94", "Jurisdiction policy banner", "5 pts", "Sprint 18"], ["US-111", "Audit export evidence", "3 pts", "Backlog"]]],
+    architecture: ["Architecture", "System design, database, API contracts, security, and deployment architecture.", [["ARCH-07", "Policy engine topology", "91%", "Review"], ["API-12", "Approval service contract", "88%", "Ready"], ["DB-04", "Audit retention model", "93%", "Approved"]]],
+    "developer-prompts": ["Developer Prompts", "Generated prompts for architecture, database, backend, frontend, APIs, security, and deployment.", [["PROMPT-BE", "Backend policy engine", "GPT-4.1", "Ready"], ["PROMPT-FE", "Approval UX components", "GPT-4.1 mini", "Ready"], ["PROMPT-SEC", "Audit export hardening", "Claude", "Review"]]],
+    "qa-center": ["QA Center", "Functional, security, performance, edge-case, and regression tests.", [["TC-311", "Threshold boundary tests", "93%", "Ready"], ["TC-318", "Fraud override abuse tests", "89%", "Ready"], ["TC-340", "Audit export retention", "91%", "Review"]]],
+    reports: ["Reports", "Executive, compliance, quality, traceability, and ROI reports.", [["REP-09", "Executive delivery summary", "Board", "Ready"], ["REP-14", "Traceability evidence", "Compliance", "Ready"], ["REP-18", "AI cost and ROI", "Finance", "Draft"]]],
+    documents: ["Documents", "Uploads, generated artifacts, exports, and evidence packs.", [["DOC-112", "Client requirement PDF", "Uploaded", "v3"], ["DOC-224", "Generated BRD package", "Generated", "v4.2"], ["DOC-330", "Audit evidence export", "Exported", "SOC2"]]],
+    discussions: ["Discussions", "Comments, mentions, reviews, decisions, and assignments.", [["THREAD-18", "Compliance owner clarification", "4 comments", "Open"], ["THREAD-24", "QA boundary agreement", "7 comments", "Resolved"], ["THREAD-31", "Architecture board review", "3 comments", "Pending"]]],
+    "activity-timeline": ["Activity Timeline", "User actions, AI decisions, approvals, sync events, and audit history.", [["09:14", "Requirement Agent split REQ-102", "AI decision", "Immutable"], ["10:26", "BRD-4.2 escalated", "Workflow", "SLA breach"], ["11:03", "PRD v2 restored", "User action", "Governed"]]],
+    "devops-center": ["DevOps Center", "Deployment prompts, release readiness, environment sync, and operational checks.", [["DEP-04", "Release plan generated", "Ready", "Azure DevOps"], ["ENV-12", "Staging config", "Synced", "GitHub"], ["OBS-07", "Audit telemetry", "Enabled", "Platform"]]
+    ]
+  };
+  const [title, body, rows] = configs[type] || configs.requirements;
+  return `
+    ${phaseHero(title, `${title} workspace`, body, "Open project", "#project-workspace")}
+    <section class="metric-strip wide">
+      ${metric("Records", String(rows.length * 14), "project scope", "cyan")}
+      ${metric("AI quality", "92%", "review pass", "green")}
+      ${metric("Trace links", "96%", "coverage", "violet")}
+      ${metric("Approvals", "5", "pending", "amber")}
+    </section>
+    <section class="glass table-panel">
+      <div class="panel-head"><div><span class="kicker">Project artifacts</span><h2>${title}</h2></div>${chip("trace-linked", "good")}</div>
+      <div class="enterprise-table artifact-table">
+        ${rows.map(([id, name, meta, status]) => `<div><strong>${id}</strong><span>${name}</span><span>${meta}</span>${chip(status, status === "Ready" || status === "Approved" || status === "Resolved" || status === "Enabled" ? "good" : status === "Pending" || status === "Review" || status === "Draft" ? "watch" : "neutral")}</div>`).join("")}
+      </div>
+    </section>
+  `;
+}
+
+function renderUnauthorized(routeId) {
+  const role = activeRoleConfig();
+  return `
+    ${phaseHero("Access restricted", "This module is not available for your current role.", `${role.role} users can only access approved modules. Unauthorized menus are hidden from the sidebar, and direct route access is blocked for the demo.`, "Go to my dashboard", `#${role.landing}`)}
+    <section class="glass permission-matrix">
+      <div class="panel-head"><div><span class="kicker">Requested module</span><h2>${routeLabel(routeId)}</h2></div>${chip("restricted", "risk")}</div>
+      <div class="permission-grid">
+        <article><strong>Current role</strong><span>${role.role}</span><p>${role.scope}</p></article>
+        <article><strong>Visible modules</strong><span>${role.routes.length} approved routes</span><p>The sidebar only displays modules granted to this role.</p></article>
+        <article><strong>Security policy</strong><span>RBAC enforced</span><p>Direct access attempts are logged to the audit trail.</p></article>
+        <article><strong>Next action</strong><span>Return to dashboard</span><p>Use an authorized module or log out and sign in with another role.</p></article>
+      </div>
+    </section>
+  `;
+}
+
 function renderScreen(active) {
   const screens = {
     "platform-admin": renderPlatformAdminDashboard,
-    tenants: renderTenantManagement,
+    "org-dashboard": () => renderRoleDashboard("Organization Admin"),
+    "ba-dashboard": () => renderRoleDashboard("Business Analyst"),
+    "po-dashboard": () => renderRoleDashboard("Product Owner"),
+    "architect-dashboard": () => renderRoleDashboard("Architect"),
+    "developer-dashboard": () => renderRoleDashboard("Developer"),
+    "qa-dashboard": () => renderRoleDashboard("QA Engineer"),
+    "devops-dashboard": () => renderRoleDashboard("DevOps Engineer"),
+    "readonly-dashboard": () => renderRoleDashboard("Read-only User"),
+    tenants: renderOrganizationManagement,
+    organizations: renderOrganizationManagement,
     "team-management": renderTeamManagementLayer,
+    "user-management": renderUserManagement,
+    "project-management": renderProjectManagement,
     "roles-permissions": renderRolesPermissions,
     "ai-providers": renderAiProviderManagement,
+    "api-keys": renderApiKeyManagement,
     "model-routing": renderModelRouting,
+    "budget-management": renderBudgetManagement,
     "usage-monitoring": renderUsageMonitoring,
     "enterprise-ai-governance": renderAiGovernance,
     "cost-management": renderCostRoi,
     "enterprise-integrations": renderIntegrationsHub,
     "enterprise-audit": renderAuditCompliance,
+    "security-center": renderSecurityCenter,
+    notifications: renderNotificationCenter,
     "global-knowledge": renderGlobalKnowledge,
     "prompt-library": renderPromptLibrary,
+    "platform-settings": () => renderSettingsCenter("Platform"),
+    "org-settings": () => renderSettingsCenter("Organization"),
+    "profile-settings": () => renderSettingsCenter("Profile"),
     "team-workspace": renderTeamWorkspace,
     "project-workspace": renderProjectWorkspace,
+    requirements: () => renderArtifactModule("requirements"),
+    brds: () => renderArtifactModule("brds"),
+    prds: () => renderArtifactModule("prds"),
+    "user-stories": () => renderArtifactModule("user-stories"),
+    architecture: () => renderArtifactModule("architecture"),
+    "developer-prompts": () => renderArtifactModule("developer-prompts"),
+    "qa-center": () => renderArtifactModule("qa-center"),
+    reports: () => renderArtifactModule("reports"),
+    documents: () => renderArtifactModule("documents"),
+    discussions: () => renderArtifactModule("discussions"),
+    "activity-timeline": () => renderArtifactModule("activity-timeline"),
+    "devops-center": () => renderArtifactModule("devops-center"),
     command: renderCommandCenter,
     twin: renderTwin,
     studio: renderStudio,
@@ -1768,14 +2454,28 @@ function renderScreen(active) {
 
 function render() {
   const active = route();
+  const isAuthRoute = authRoutes.has(active);
   const webglClass = document.body.classList.contains("webgl-fallback")
     ? "webgl-fallback"
     : document.body.classList.contains("webgl-ready")
       ? "webgl-ready"
       : "";
-  document.body.className = ["ai-os", webglClass].filter(Boolean).join(" ");
+  document.body.className = ["ai-os", isAuthRoute ? "auth-os" : "", webglClass].filter(Boolean).join(" ");
   state.modal = null;
-  state.activeLayer = layerForRoute(active).role;
+  if (isAuthRoute) {
+    app.innerHTML = renderAuthScreen(active);
+    return;
+  }
+  if (!state.isAuthenticated) {
+    app.innerHTML = renderAuthScreen("splash");
+    return;
+  }
+  state.activeLayer = state.currentRole;
+  if (!canAccess(active)) {
+    app.innerHTML = shell(active, renderUnauthorized(active));
+    window.SDLCVisuals?.refresh?.();
+    return;
+  }
   renderShell(active);
 }
 
@@ -1784,7 +2484,57 @@ function renderShell(active = route()) {
   window.SDLCVisuals?.refresh?.();
 }
 
+function showToast(message, duration = 2600) {
+  if (state.toastTimer) window.clearTimeout(state.toastTimer);
+  state.toast = message;
+  state.toastTimer = window.setTimeout(() => {
+    if (state.toast !== message) return;
+    state.toast = "";
+    state.toastTimer = null;
+    if (state.isAuthenticated && !authRoutes.has(route())) renderShell();
+    else render();
+  }, duration);
+}
+
 document.addEventListener("click", (event) => {
+  const loginRole = event.target.closest("[data-login-role]");
+  if (loginRole) {
+    state.selectedLoginRole = loginRole.dataset.loginRole;
+    app.innerHTML = renderAuthScreen(route());
+    return;
+  }
+
+  const authAction = event.target.closest("[data-auth-action]");
+  if (authAction) {
+    const action = authAction.dataset.authAction;
+    if (action === "login" || action === "sso") {
+      state.toast = "";
+      location.hash = "mfa";
+      return;
+    }
+    if (action === "complete-login") {
+      const role = roleByName(state.selectedLoginRole);
+      state.isAuthenticated = true;
+      state.currentRole = role.role;
+      state.activeLayer = role.role;
+      state.modal = null;
+      showToast(`${role.role} workspace opened.`, 2200);
+      location.hash = role.landing;
+      return;
+    }
+  }
+
+  const logout = event.target.closest("[data-logout]");
+  if (logout) {
+    state.isAuthenticated = false;
+    state.modal = null;
+    state.toast = "";
+    if (state.toastTimer) window.clearTimeout(state.toastTimer);
+    state.toastTimer = null;
+    location.hash = "splash";
+    return;
+  }
+
   const modalButton = event.target.closest("[data-modal]");
   if (modalButton) {
     state.modal = modalButton.dataset.modal;
@@ -1811,13 +2561,9 @@ document.addEventListener("click", (event) => {
   }
 
   if (event.target.closest("[data-run]")) {
-    state.toast = "AI simulation started. Streaming agents, trace links, and risk forecasts are updating.";
+    showToast("AI simulation started. Streaming agents, trace links, and risk forecasts are updating.");
     state.tick += 1;
     renderShell();
-    window.setTimeout(() => {
-      state.toast = "";
-      renderShell();
-    }, 2600);
     return;
   }
 
